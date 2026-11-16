@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Choraflow</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <script type="module" crossorigin src="./assets/index--l8Eel64.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-Cjq1wU1J.css">
+  </head>
+  <body>
+    <div id="app">
+      <div id="main">
+        <aside id="sidebar">
+          <div id="tree-header">
+            <input id="tree-search" type="search" placeholder="Search…" />
+            <div id="tree-tabs">
+              <button type="button" data-tab="spatial" class="active">Spatial</button>
+              <button type="button" data-tab="class">Class</button>
+            </div>
+          </div>
+          <div id="tree"><div class="placeholder">No model loaded</div></div>
+          <div id="sidebar-resizer" title="Drag to resize"></div>
+          <div id="properties" class="properties empty">Select an element to inspect properties</div>
+          <footer id="status-bar" aria-live="polite">
+            <input id="file-input" type="file" accept=".rvt,.rfa,.rte,.rft" hidden />
+            <button id="about-link" type="button">About</button>
+            <button id="open-button" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.5h6l2 2h9v9.5h-17z" /><path d="M3.5 8.5v-3h5.6l2 3" /></svg>
+              <span>Open</span>
+            </button>
+            <button id="export-button" type="button" disabled title="Export the loaded model">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10" /><path d="M8 10l4 4 4-4" /><path d="M4.5 17.5h15" /></svg>
+              <span>Export</span>
+            </button>
+            <select id="export-format" title="Export format">
+              <option value="glb">.glb</option>
+            </select>
+          </footer>
+        </aside>
+        <div id="main-resizer" title="Drag to resize"></div>
+        <div id="viewport-container">
+          <canvas id="viewport"></canvas>
+          <div id="viewport-tools" aria-label="Viewer tools">
+            <button id="fit-button" class="tool-icon" type="button" title="Zoom to bounds (F)" aria-label="Zoom to bounds">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.25 8.25 2.5 2.5M2.5 7.75V2.5h5.25" /><path d="M15.75 8.25 21.5 2.5M16.25 2.5h5.25v5.25" /><path d="M8.25 15.75 2.5 21.5M2.5 16.25v5.25h5.25" /><path d="M15.75 15.75 21.5 21.5M16.25 21.5h5.25v-5.25" /></svg>
+            </button>
+            <button id="hide-button" class="tool-icon" type="button" title="Hide selection (H)" aria-label="Hide selection">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z" /><circle cx="12" cy="12" r="3" /><path d="M4 20 20 4" /></svg>
+            </button>
+            <button id="isolate-button" class="tool-icon" type="button" title="Isolate selection (I)" aria-label="Isolate selection">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8h8v8H8z" /><path d="M2.5 2.5h5M2.5 2.5v5M21.5 2.5h-5M21.5 2.5v5M2.5 21.5h5M2.5 21.5v-5M21.5 21.5h-5M21.5 21.5v-5" stroke-dasharray="2 2" /></svg>
+            </button>
+            <button id="show-all-button" class="tool-icon" type="button" title="Show all (A)" aria-label="Show all">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z" /><circle cx="12" cy="12" r="3" /></svg>
+            </button>
+            <button id="xray-button" class="tool-icon" type="button" title="X-ray unselected (X)" aria-label="X-ray" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 7.5 12 3.5l7.5 4v9L12 20.5l-7.5-4z" stroke-dasharray="2.2 1.6" /><path d="M4.5 7.5 12 11.5l7.5-4M12 11.5v9" stroke-dasharray="2.2 1.6" /></svg>
+            </button>
+          </div>
+          <div id="welcome">
+            <h1>open<span>RVT</span></h1>
+            <p>Revit files in the browser. Nothing is uploaded: the file is read on this computer.</p>
+            <button id="welcome-open" type="button">Open .rvt / .rfa</button>
+            <p class="hint">or drag &amp; drop a file here</p>
+          </div>
+          <div id="load-overlay" hidden>
+            <div id="load-title">Loading…</div>
+            <div id="load-bar"><div id="load-bar-fill"></div></div>
+            <div id="load-stage"></div>
+          </div>
+          <div id="error-banner" hidden></div>
+          <div id="stats"></div>
+          <div id="drop-zone" hidden>Drop the Revit file to open it</div>
+          <div id="about-panel" role="dialog" hidden>
+            <button id="about-close" class="panel-close" type="button" aria-label="Close"></button>
+            <h2>Choraflow</h2>
+            <p>A WebAssembly viewer for Autodesk Revit® files (.rvt, .rfa, .rte, .rft). The file never leaves your computer.</p>
+            <p>Revit files are read by Choraflow's own clean-room reader, which draws each element from the 3-D representation Revit saved in the file.</p>
+            <p>Mouse: left drag orbits about the point under the cursor (or the last one picked), right or middle drag (or Shift + left) pans holding the point under the cursor, wheel zooms toward the surface under the cursor, click selects (Ctrl adds), double-click focuses the point under the cursor (on the background: fits the model). Keys: F fit, H hide, I isolate, A show all, X x-ray, Esc clear.</p>
+            <p class="fine">Autodesk and Revit are registered trademarks of Autodesk, Inc. Choraflow is not affiliated with Autodesk.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
